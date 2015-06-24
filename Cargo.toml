@@ -1,0 +1,7 @@
+[package]
+name = "prog"
+version = "0.1.0"
+authors = ["Alberto Corona <alberto@0x1a.us>"]
+
+[dependencies]
+ansi_term = "0.6.1"
