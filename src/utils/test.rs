@@ -16,8 +16,7 @@ use std::path::{Path};
 #[cfg(target_family = "windows")]
 use std::os::windows;
 
-/// Removes an entire directory and all of its contents. Assumes the path 
-/// given exists.
+/// Removes a directory or file and all of its contents.
 ///
 /// # Example
 /// ```
@@ -27,16 +26,23 @@ use std::os::windows;
 /// ```
 pub fn remove<F: AsRef<Path>>(path: F) {
     if path.as_ref().is_dir() {
-        fs::remove_dir_all(&path).ok();
-        println!("Removed: {}", path.as_ref().as_str().paint(Colour::Red));
+        match fs::remove_dir_all(&path) {
+            Ok(_) => { println!("test: removed directory '{}'",
+                                path.as_ref().as_str().paint(Colour::Green)) },
+            Err(_) => { println!("test: unable to remove directory '{}'",
+                                 path.as_ref().as_str().paint(Colour::Red)) },
+        }
     } else {
-        fs::remove_file(&path).ok();
-        println!("Removed: {}", path.as_ref().as_str().paint(Colour::Red));
+        match fs::remove_file(&path) {
+            Ok(_) => { println!("test: removed file '{}'",
+                                path.as_ref().as_str().paint(Colour::Green)) },
+            Err(_) => { println!("test: unable to remove file '{}'",
+                                 path.as_ref().as_str().paint(Colour::Red)) },
+        }
     }
 }
 
-/// Creates a file, assumes it has the correct permissions to write to the 
-/// `path` given.
+/// Creates a file
 ///
 /// # Example
 /// ```
@@ -46,11 +52,15 @@ pub fn remove<F: AsRef<Path>>(path: F) {
 /// test::remove("file.txt");
 /// ```
 pub fn create_file<F: AsRef<Path>>(path: F) {
-    fs::File::create(path).ok();
+    match fs::File::create(&path) {
+        Ok(_) => { println!("test: created file '{}'",
+                            path.as_ref().as_str().paint(Colour::Green)) },
+        Err(_) => { println!("test: unable to crate file '{}'",
+                             path.as_ref().as_str().paint(Colour::Red)) },
+    }
 }
 
-/// Creates a directory, assumes it has the correct permissions to create a 
-/// directory in the `path` given.
+/// Creates a directory
 ///
 /// # Example
 /// ```
@@ -60,7 +70,12 @@ pub fn create_file<F: AsRef<Path>>(path: F) {
 /// test::remove("test_dir");
 /// ```
 pub fn create_dir<F: AsRef<Path>>(path: F) {
-    fs::create_dir(path).ok();
+    match fs::create_dir(&path) {
+        Ok(_) => { println!("test: created directory '{}'",
+                            path.as_ref().as_str().paint(Colour::Green)) },
+        Err(_) => { println!("test: unable to crate directory '{}'",
+                             path.as_ref().as_str().paint(Colour::Red)) },
+    }
 }
 
 #[cfg(target_family = "unix")]
@@ -74,4 +89,21 @@ pub fn test_create_symlink<T: AsRef<Path>, F: AsRef<Path>>(to: &T, from: &F) {
             panic!("{}", e.to_string().paint(Colour::Red));
         }
     }
+}
+
+#[test]
+fn test_test_remove() {
+    remove("does_not_exist");
+}
+
+#[test]
+fn test_test_create_file() {
+    create_file("test-file");
+    remove("test-file");
+}
+
+#[test]
+fn test_test_create_dir() {
+    create_dir("test-dir");
+    remove("test-dir");
 }
