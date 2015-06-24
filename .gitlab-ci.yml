@@ -1,3 +1,4 @@
-script:
-    - cargo build --verbose
-    - cargo test --verbose
+builds:
+        script:
+                - cargo build --verbose
+                - cargo test --verbose
