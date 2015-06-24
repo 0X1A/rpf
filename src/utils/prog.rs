@@ -17,11 +17,11 @@ use utils::Status;
 /// assert_eq!(UTIL.yr, "2015");
 /// ```
 pub struct Prog {
-    /// Name of rpfram
+    /// Name of program
     pub name: &'static str,
-    /// Version of rpfram
+    /// Version of program
     pub vers: &'static str,
-    /// Year of copyright for rpfram
+    /// Year of copyright for program
     pub yr: &'static str,
 }
 
@@ -33,15 +33,19 @@ impl Prog {
     /// ```
     /// use rpf::Prog;
     ///
-    /// let rpf = Prog { name: "util", vers: "0.1.0", yr: "2015" };
-    /// rpf.copyright("BSD-3-Clause", vec!["Author"]);
+    /// let prog = Prog { name: "util", vers: "0.1.0", yr: "2015" };
+    /// prog.copyright(
+    /// "Copyright (C) 2015 util developers\n\
+    /// License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
+    /// This is free software: you are free to change and redistribute it.\n\
+    /// There is NO WARRANTY, to the extent permitted by law.\n", vec!["Author"]);
     /// ```
     ///
     /// Would print the following:
     ///
     /// ```bash
-    /// util (core-utils) 0.1.0
-    /// Copyright (C) 2015 core-utils developers
+    /// util 0.1.0
+    /// Copyright (C) 2015 util developers
     /// License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
     /// This is free software: you are free to change and redistribute it.
     /// There is NO WARRANTY, to the extent permitted by law.
@@ -49,21 +53,8 @@ impl Prog {
     /// Written by Author
     /// ```
     pub fn copyright(&self, license: &str, auth: Vec<&str>) {
-        match license {
-            "Apache" => { },
-            "BSD-3-Clause" => { },
-            "GPL-2.0" => { },
-            "GPL-3.0" => {
-                print!("{} (core-utils) {}\n\
-            Copyright (C) {} core-utils developers\n\
-            License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
-            This is free software: you are free to change and redistribute it.\n\
-            There is NO WARRANTY, to the extent permitted by law.\n\n", &self.name, &self.vers, &self.yr);
-                print!("Written by ");
-            },
-            "MIT" => { },
-            _ => { panic!("License not specified"); }
-        }
+        print!("{} {}\n{}", &self.name, &self.vers, license);
+        print!("Written by ");
         for pers in auth.iter() {
             print!("{} ", pers);
         }
@@ -77,8 +68,8 @@ impl Prog {
     /// ```should_panic
     /// use rpf::Prog;
     ///
-    /// let rpf = Prog { name: "util", vers: "0.1.0", yr: "2015" };
-    /// rpf.rpf_try();
+    /// let prog = Prog { name: "util", vers: "0.1.0", yr: "2015" };
+    /// prog.prog_try();
     /// ```
     ///
     /// Would print the following:
@@ -87,9 +78,19 @@ impl Prog {
     /// util: Missing arguments
     /// Try util --help for more information
     /// ```
-    pub fn rpf_try(&self) {
+    pub fn prog_try(&self) {
         println!("{}: Missing arguments\n\
              Try '{} --help' for more information", &self.name, &self.name);
         Status::ArgError.exit();
     }
+}
+
+#[test]
+fn test_prog_copyright() {
+    let prog = Prog { name: "util", vers: "0.1.0", yr: "2015" };
+    prog.copyright(
+    "Copyright (C) 2015 util developers\n\
+    License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
+    This is free software: you are free to change and redistribute it.\n\
+    There is NO WARRANTY, to the extent permitted by law.\n", vec!["Author"]);
 }
