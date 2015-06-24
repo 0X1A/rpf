@@ -2,6 +2,10 @@
 name = "rpf"
 version = "0.1.0"
 authors = ["Alberto Corona <alberto@0x1a.us>"]
+description = "A framework for creating Rust programs"
+repository = "https://gitlab.com/0X1A/rpf"
+keywords = ["framework"]
+license = "BSD-3-Clause"
 
 [dependencies]
 ansi_term = "0.6.1"
