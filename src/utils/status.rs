@@ -1,5 +1,5 @@
 // Copyright (C) 2015, Alberto Corona <alberto@0x1a.us>
-// All rights reserved. This file is part of prog, distributed under the
+// All rights reserved. This file is part of rpf, distributed under the
 // GPL v3 license. For full terms please see the LICENSE file.
 
 extern crate ansi_term;
@@ -27,7 +27,7 @@ impl Status {
     /// # Example
     ///
     /// ```should_panic
-    /// use prog::Status;
+    /// use rpf::Status;
     ///
     /// Status::ArgError.exit();
     /// ```
@@ -36,19 +36,19 @@ impl Status {
     }
 
     /// Used for errors, prints error messages in red terminal font and calls
-    /// `prog::exit`
+    /// `rpf::exit`
     ///
     /// # Example
     ///
     /// ```should_panic
-    /// use prog::Status;
+    /// use rpf::Status;
     /// use std::path::Path;
     ///
     /// let file = Path::new("file.txt");
     /// Status::Error.err("util", "Hit an error".to_string());
     /// ```
-    pub fn err(&self, prog: &str, mesg: String) {
-        println!("{}{} {}", prog.paint(Colour::Red), ":".paint(Colour::Red),
+    pub fn err(&self, rpf: &str, mesg: String) {
+        println!("{}{} {}", rpf.paint(Colour::Red), ":".paint(Colour::Red),
         mesg.paint(Colour::Red));
         self.exit();
     }

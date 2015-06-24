@@ -1,5 +1,5 @@
 // Copyright (C) 2015, Alberto Corona <alberto@0x1a.us>
-// All rights reserved. This file is part of prog, distributed under the
+// All rights reserved. This file is part of rpf, distributed under the
 // GPL v3 license. For full terms please see the LICENSE file.
 
 extern crate ansi_term;
@@ -21,7 +21,7 @@ use std::os::windows;
 ///
 /// # Example
 /// ```
-/// use prog::test;
+/// use rpf::test;
 ///
 /// test::remove("does_not_exist");
 /// ```
@@ -40,7 +40,7 @@ pub fn remove<F: AsRef<Path>>(path: F) {
 ///
 /// # Example
 /// ```
-/// use prog::test;
+/// use rpf::test;
 ///
 /// test::create_file("file.txt");
 /// test::remove("file.txt");
@@ -54,7 +54,7 @@ pub fn create_file<F: AsRef<Path>>(path: F) {
 ///
 /// # Example
 /// ```
-/// use prog::test;
+/// use rpf::test;
 ///
 /// test::create_dir("test_dir");
 /// test::remove("test_dir");
