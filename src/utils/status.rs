@@ -2,11 +2,9 @@
 // All rights reserved. This file is part of rpf, distributed under the
 // GPL v3 license. For full terms please see the LICENSE file.
 
-extern crate ansi_term;
-
-use self::ansi_term::{Colour};
 use utils::PathMod;
 use utils::Styled;
+use utils::Color;
 
 use std::process;
 use std::path::PathBuf;
@@ -48,15 +46,15 @@ impl Status {
     /// Status::Error.err("util", "Hit an error".to_string());
     /// ```
     pub fn err(&self, rpf: &str, mesg: String) {
-        println!("{}{} {}", rpf.paint(Colour::Red), ":".paint(Colour::Red),
-        mesg.paint(Colour::Red));
+        println!("{}{} {}", rpf.paint(Color::Red), ":".paint(Color::Red),
+        mesg.paint(Color::Red));
         self.exit();
     }
 
     /// Used for errors when working with paths, works similar to `err`
     pub fn path_err(&self, mesg: String, item: PathBuf) {
-        println!("{}{} {}", item.as_str().paint(Colour::Red),
-        ":".paint(Colour::Red), mesg.paint(Colour::Red));
+        println!("{}{} {}", item.as_str().paint(Color::Red),
+        ":".paint(Color::Red), mesg.paint(Color::Red));
         self.exit();
     }
 

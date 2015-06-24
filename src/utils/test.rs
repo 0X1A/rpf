@@ -2,11 +2,9 @@
 // All rights reserved. This file is part of rpf, distributed under the
 // GPL v3 license. For full terms please see the LICENSE file.
 
-extern crate ansi_term;
-
-use self::ansi_term::{Colour};
 use utils::PathMod;
 use utils::Styled;
+use utils::Color;
 
 use std::fs;
 #[cfg(target_family = "unix")]
@@ -28,16 +26,16 @@ pub fn remove<F: AsRef<Path>>(path: F) {
     if path.as_ref().is_dir() {
         match fs::remove_dir_all(&path) {
             Ok(_) => { println!("test: removed directory '{}'",
-                                path.as_ref().as_str().paint(Colour::Green)) },
+                                path.as_ref().as_str().paint(Color::Green)) },
             Err(_) => { println!("test: unable to remove directory '{}'",
-                                 path.as_ref().as_str().paint(Colour::Red)) },
+                                 path.as_ref().as_str().paint(Color::Red)) },
         }
     } else {
         match fs::remove_file(&path) {
             Ok(_) => { println!("test: removed file '{}'",
-                                path.as_ref().as_str().paint(Colour::Green)) },
+                                path.as_ref().as_str().paint(Color::Green)) },
             Err(_) => { println!("test: unable to remove file '{}'",
-                                 path.as_ref().as_str().paint(Colour::Red)) },
+                                 path.as_ref().as_str().paint(Color::Red)) },
         }
     }
 }
@@ -54,9 +52,9 @@ pub fn remove<F: AsRef<Path>>(path: F) {
 pub fn create_file<F: AsRef<Path>>(path: F) {
     match fs::File::create(&path) {
         Ok(_) => { println!("test: created file '{}'",
-                            path.as_ref().as_str().paint(Colour::Green)) },
+                            path.as_ref().as_str().paint(Color::Green)) },
         Err(_) => { println!("test: unable to crate file '{}'",
-                             path.as_ref().as_str().paint(Colour::Red)) },
+                            path.as_ref().as_str().paint(Color::Red)) },
     }
 }
 
@@ -72,9 +70,9 @@ pub fn create_file<F: AsRef<Path>>(path: F) {
 pub fn create_dir<F: AsRef<Path>>(path: F) {
     match fs::create_dir(&path) {
         Ok(_) => { println!("test: created directory '{}'",
-                            path.as_ref().as_str().paint(Colour::Green)) },
+                            path.as_ref().as_str().paint(Color::Green)) },
         Err(_) => { println!("test: unable to crate directory '{}'",
-                             path.as_ref().as_str().paint(Colour::Red)) },
+                            path.as_ref().as_str().paint(Color::Red)) },
     }
 }
 
@@ -86,7 +84,7 @@ pub fn test_create_symlink<T: AsRef<Path>, F: AsRef<Path>>(to: &T, from: &F) {
                 to.as_ref().as_str().bold());
         },
         Err(e) => {
-            panic!("{}", e.to_string().paint(Colour::Red));
+            panic!("{}", e.to_string().paint(Color::Red));
         }
     }
 }
