@@ -3,7 +3,6 @@
 // BSD 3-Clause license. For full terms please see the LICENSE file.
 
 use std::path::{PathBuf,Path};
-use std::fs::{PathExt};
 
 /// Adds some useful functions for manipulating and retrieving information from
 /// paths
