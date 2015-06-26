@@ -73,19 +73,6 @@ pub trait PathMod {
     /// assert_eq!(path_string, "/var/log/test".to_string());
     /// ```
     fn as_string(&self) -> String;
-
-    /// Returns true if a given path is a symbolic link, returns false if the
-    /// path is a regular file, a directory, or does not exist
-    ///
-    /// # Example
-    /// ```
-    /// use rpf::PathMod;
-    /// use std::path::PathBuf;
-    ///
-    /// let path = PathBuf::from("test-symlink");
-    /// assert_eq!(path.is_symlink(), false);
-    /// ```
-    fn is_symlink(&self) -> bool;
 }
 
 impl PathMod for PathBuf {
@@ -116,15 +103,6 @@ impl PathMod for PathBuf {
 
     fn as_string(&self) -> String {
         self.as_str().to_string()
-    }
-
-    fn is_symlink(&self) -> bool {
-        if self.exists() {
-            if self.is_dir() || self.is_file() {
-                return false
-            }
-            return true
-        } else { return false }
     }
 }
 
@@ -157,15 +135,6 @@ impl PathMod for Path {
     fn as_string(&self) -> String {
         self.as_str().to_string()
     }
-
-    fn is_symlink(&self) -> bool {
-        if self.exists() {
-            if self.is_dir() || self.is_file() {
-                return false
-            }
-            return true
-        } else { return false }
-    }
 }
 
 #[test]
@@ -190,10 +159,4 @@ fn test_pathmod_as_str() {
 fn test_pathmod_as_string() {
     let string = Path::new("/var/log/test").as_string();
     assert_eq!(string, "/var/log/test".to_string());
-}
-
-#[test]
-fn test_pathmod_is_symlink() {
-    let path = Path::new("/var/log/test");
-    assert_eq!(path.is_symlink(), false);
 }
