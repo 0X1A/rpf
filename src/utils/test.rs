@@ -9,7 +9,6 @@ use utils::Color;
 use std::fs;
 #[cfg(target_family = "unix")]
 use std::os;
-use std::fs::{PathExt};
 use std::path::{Path};
 #[cfg(target_family = "windows")]
 use std::os::windows;
@@ -17,27 +16,37 @@ use std::os::windows;
 /// Removes a directory or file and all of its contents.
 ///
 /// # Example
-/// ```
+/// ```should_panic
 /// use rpf::test;
 ///
 /// test::remove("does_not_exist");
 /// ```
 pub fn remove<F: AsRef<Path>>(path: F) {
-    if path.as_ref().is_dir() {
-        match fs::remove_dir_all(&path) {
-            Ok(_) => { println!("test: removed directory '{}'",
-                                path.as_ref().as_str().paint(Color::Green)) },
-            Err(_) => { println!("test: unable to remove directory '{}'",
-                                 path.as_ref().as_str().paint(Color::Red)) },
-        }
-    } else {
-        match fs::remove_file(&path) {
-            Ok(_) => { println!("test: removed file '{}'",
-                                path.as_ref().as_str().paint(Color::Green)) },
-            Err(_) => { println!("test: unable to remove file '{}'",
-                                 path.as_ref().as_str().paint(Color::Red)) },
-        }
-    }
+    match fs::symlink_metadata(path.as_ref()) {
+        Ok(file) => {
+            if file.file_type().is_dir() {
+                print!("{} is dir or symlink", path.as_ref().display());
+                match fs::remove_dir_all(&path) {
+                    Ok(_) => { println!("test: removed directory '{}'",
+                                        path.as_ref().as_str().paint(Color::Green))
+                    },
+                    Err(_) => { println!("test: unable to remove directory '{}'",
+                                         path.as_ref().as_str().paint(Color::Red))
+                    },
+                };
+            } else if file.file_type().is_file() || file.file_type().is_symlink() {
+                match fs::remove_file(&path) {
+                    Ok(_) => { println!("test: removed file '{}'",
+                                        path.as_ref().as_str().paint(Color::Green))
+                    },
+                    Err(_) => { println!("test: unable to remove file '{}'",
+                                         path.as_ref().as_str().paint(Color::Red))
+                    },
+                };
+            }
+        },
+        Err(e) => { panic!("{}", e.to_string()); },
+    };
 }
 
 /// Creates a file
@@ -77,8 +86,8 @@ pub fn create_dir<F: AsRef<Path>>(path: F) {
 }
 
 #[cfg(target_family = "unix")]
-pub fn test_create_symlink<T: AsRef<Path>, F: AsRef<Path>>(to: &T, from: &F) {
-    match os::unix::fs::symlink(from, to) {
+pub fn create_symlink<T: AsRef<Path>, F: AsRef<Path>>(from: &F, to: &T) {
+    match os::unix::fs::symlink(&from, &to) {
         Ok(_) => {
             println!("{} symlinked to {}", from.as_ref().as_str().bold(),
                 to.as_ref().as_str().bold());
@@ -89,7 +98,38 @@ pub fn test_create_symlink<T: AsRef<Path>, F: AsRef<Path>>(to: &T, from: &F) {
     }
 }
 
+#[cfg(target_family = "windows")]
+pub fn create_symlink<T: AsRef<Path>, F: AsRef<Path>>(from: &F, to: &T) {
+    match fs::symlink_metadata(path.as_ref()) {
+        Ok(file) => {
+            if file.file_type().is_file() {
+                match os::windows::fs::symlink_file(&from, &to) {
+                    Ok(_) => {
+                        println!("{} symlinked to {}", from.as_ref().as_str().bold(),
+                        to.as_ref().as_str().bold());
+                    },
+                    Err(e) => {
+                        panic!("{}", e.to_string().paint(Color::Red));
+                    }
+                };
+            } else if file.is_dir() {
+                match os::windows::fs::symlink_dir(&from, &to) {
+                    Ok(_) => {
+                        println!("{} symlinked to {}", from.as_ref().as_str().bold(),
+                        to.as_ref().as_str().bold());
+                    },
+                    Err(e) => {
+                        panic!("{}", e.to_string().paint(Color::Red));
+                    }
+                };
+            }
+        }
+        Err(e) => { panic!("{}", e.to_string()); },
+    };
+}
+
 #[test]
+#[should_panic]
 fn test_test_remove() {
     remove("does_not_exist");
 }
@@ -104,4 +144,10 @@ fn test_test_create_file() {
 fn test_test_create_dir() {
     create_dir("test-dir");
     remove("test-dir");
+}
+
+#[test]
+fn test_test_create_symlink() {
+    create_symlink(&String::from("LICENSE"), &String::from("test-symlink"));
+    remove("test-symlink");
 }

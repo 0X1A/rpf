@@ -4,7 +4,7 @@
 
 //! rpf is a framework to help create Rust programs
 
-#![feature(path_relative_from,path_ext)]
+#![feature(path_relative_from)]
 
 mod utils;
 
