@@ -1,6 +1,6 @@
 [package]
 name = "rpf"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Alberto Corona <alberto@0x1a.us>"]
 description = "A framework for creating Rust programs"
 repository = "https://gitlab.com/0X1A/rpf"
