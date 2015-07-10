@@ -100,10 +100,10 @@ pub fn create_symlink<T: AsRef<Path>, F: AsRef<Path>>(from: &F, to: &T) {
 
 #[cfg(target_family = "windows")]
 pub fn create_symlink<T: AsRef<Path>, F: AsRef<Path>>(from: &F, to: &T) {
-    match fs::symlink_metadata(path.as_ref()) {
+    match fs::symlink_metadata(from.as_ref()) {
         Ok(file) => {
             if file.file_type().is_file() {
-                match os::windows::fs::symlink_file(&from, &to) {
+                match windows::fs::symlink_file(&from, &to) {
                     Ok(_) => {
                         println!("{} symlinked to {}", from.as_ref().as_str().bold(),
                         to.as_ref().as_str().bold());
@@ -113,7 +113,7 @@ pub fn create_symlink<T: AsRef<Path>, F: AsRef<Path>>(from: &F, to: &T) {
                     }
                 };
             } else if file.is_dir() {
-                match os::windows::fs::symlink_dir(&from, &to) {
+                match windows::fs::symlink_dir(&from, &to) {
                     Ok(_) => {
                         println!("{} symlinked to {}", from.as_ref().as_str().bold(),
                         to.as_ref().as_str().bold());
