@@ -7,6 +7,18 @@ use std::path::{PathBuf,Path};
 /// Adds some useful functions for manipulating and retrieving information from
 /// paths
 pub trait PathMod {
+    /// Returns true if the path's file name starts with a "."
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use rpf::PathMod;
+    /// use std::path::Path;
+    ///
+    /// let path = Path::new("/test/dot/.dotfile");
+    /// assert_eq!(path.is_dot(), true);
+    fn is_dot(&self) -> bool;
+
     /// Returns a `PathBuf` of `&self`'s last component
     ///
     /// # Example
@@ -33,7 +45,7 @@ pub trait PathMod {
     /// ```
     fn first_component(&self) -> PathBuf;
 
-    /// Returns a `PathBuf` of `&self` relative from `rel_from`
+    /// Returns a `PathBuf` of `&self` relative from its parent
     ///
     /// # Example
     /// ```
@@ -42,9 +54,9 @@ pub trait PathMod {
     ///
     /// let path = PathBuf::from("mod");
     /// let parent = PathBuf::from("/tmp/test/mod");
-    /// let rel = path.rel_to(&parent);
+    /// let rel = path.rel_to_parent();
     /// ```
-    fn rel_to<T: AsRef<Path>>(&self, rel_from: &T) -> PathBuf;
+    fn rel_to_parent(&self) -> PathBuf;
 
     /// Returns a `&str` for a path, returns a blank string if unable to
     /// get a string for the path
@@ -75,6 +87,20 @@ pub trait PathMod {
 }
 
 impl PathMod for PathBuf {
+    fn is_dot(&self) -> bool {
+        let file_name = match self.file_name() {
+            Some(s) => {
+                match s.to_str() {
+                    Some(k) => { k },
+                    None => { "" }
+                }
+            },
+            None => { "" }
+        };
+        if file_name.starts_with(".") { return true; }
+        else { return false; }
+    }
+
     fn last_component(&self) -> PathBuf {
         match self.components().last() {
             Some(s) => { PathBuf::from(s.as_os_str()) },
@@ -89,8 +115,15 @@ impl PathMod for PathBuf {
         }
     }
 
-    fn rel_to<T: AsRef<Path>>(&self, rel_from: &T) -> PathBuf {
-        self.relative_from(&rel_from).unwrap_or(&PathBuf::new()).to_path_buf()
+    fn rel_to_parent(&self) -> PathBuf {
+        let parent = match self.parent() {
+            Some(p) => { p },
+            None => { Path::new("") }
+        };
+        match self.relative_from(parent) {
+            Some(s) => { PathBuf::from(s) },
+            None => { PathBuf::from("") }
+        }
     }
 
     fn as_str(&self) -> &str {
@@ -106,6 +139,20 @@ impl PathMod for PathBuf {
 }
 
 impl PathMod for Path {
+    fn is_dot(&self) -> bool {
+        let file_name = match self.file_name() {
+            Some(s) => {
+                match s.to_str() {
+                    Some(k) => { k },
+                    None => { "" }
+                }
+            },
+            None => { "" }
+        };
+        if file_name.starts_with(".") { return true; }
+        else { return false; }
+    }
+
     fn last_component(&self) -> PathBuf {
         match self.components().last() {
             Some(s) => { PathBuf::from(s.as_os_str()) },
@@ -120,8 +167,15 @@ impl PathMod for Path {
         }
     }
 
-    fn rel_to<T: AsRef<Path>>(&self, rel_from: &T) -> PathBuf {
-        self.relative_from(&rel_from).unwrap_or(&PathBuf::new()).to_path_buf()
+    fn rel_to_parent(&self) -> PathBuf {
+        let parent = match self.parent() {
+            Some(p) => { p },
+            None => { Path::new("") }
+        };
+        match self.relative_from(parent) {
+            Some(s) => { PathBuf::from(s) },
+            None => { PathBuf::from("") }
+        }
     }
 
     fn as_str(&self) -> &str {
@@ -158,4 +212,10 @@ fn test_pathmod_as_str() {
 fn test_pathmod_as_string() {
     let string = Path::new("/var/log/test").as_string();
     assert_eq!(string, "/var/log/test".to_string());
+}
+
+#[test]
+fn test_pathmod_is_dot() {
+    let path = Path::new("/dir/test/.test");
+    assert_eq!(path.is_dot(), true);
 }
