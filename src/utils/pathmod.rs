@@ -28,9 +28,9 @@ pub trait PathMod {
     /// use std::path::Path;
     ///
     /// let path = Path::new("/tmp/test/mod");
-    /// let last = path.last_component();
+    /// let last = path.last_component().unwrap();
     /// ```
-    fn last_component(&self) -> PathBuf;
+    fn last_component(&self) -> Option<PathBuf>;
 
     /// Returns a `PathBuf` of `&self`'s first component
     ///
@@ -40,10 +40,10 @@ pub trait PathMod {
     /// use std::path::PathBuf;
     ///
     /// let path = PathBuf::from("/tmp/test/mod");
-    /// let first = path.first_component();
+    /// let first = path.first_component().unwrap();
     /// assert_eq!(first, PathBuf::from("/"));
     /// ```
-    fn first_component(&self) -> PathBuf;
+    fn first_component(&self) -> Option<PathBuf>;
 
     /// Returns a `PathBuf` of `&self` relative from its parent
     ///
@@ -52,11 +52,10 @@ pub trait PathMod {
     /// use rpf::PathMod;
     /// use std::path::PathBuf;
     ///
-    /// let path = PathBuf::from("mod");
-    /// let parent = PathBuf::from("/tmp/test/mod");
-    /// let rel = path.rel_to_parent();
+    /// let path = PathBuf::from("/tmp/test/mod");
+    /// assert_eq!(PathBuf::from("mod"), path.rel_to_parent().unwrap());
     /// ```
-    fn rel_to_parent(&self) -> PathBuf;
+    fn rel_to_parent(&self) -> Option<PathBuf>;
 
     /// Returns a `&str` for a path, returns a blank string if unable to
     /// get a string for the path
@@ -101,28 +100,28 @@ impl PathMod for PathBuf {
         else { return false; }
     }
 
-    fn last_component(&self) -> PathBuf {
+    fn last_component(&self) -> Option<PathBuf> {
         match self.components().last() {
-            Some(s) => { PathBuf::from(s.as_os_str()) },
-            None => { PathBuf::new() },
+            Some(s) => { Some(PathBuf::from(s.as_os_str())) },
+            None => { None },
         }
     }
 
-    fn first_component(&self) -> PathBuf {
+    fn first_component(&self) -> Option<PathBuf> {
         match self.components().nth(0) {
-            Some(s) => { PathBuf::from(s.as_os_str()) },
-            None => { PathBuf::new() },
+            Some(s) => { Some(PathBuf::from(s.as_os_str())) },
+            None => { None },
         }
     }
 
-    fn rel_to_parent(&self) -> PathBuf {
+    fn rel_to_parent(&self) -> Option<PathBuf> {
         let parent = match self.parent() {
             Some(p) => { p },
-            None => { Path::new("") }
+            None => { return None }
         };
         match self.relative_from(parent) {
-            Some(s) => { PathBuf::from(s) },
-            None => { PathBuf::from("") }
+            Some(s) => { Some(PathBuf::from(s)) },
+            None => { None }
         }
     }
 
@@ -153,28 +152,28 @@ impl PathMod for Path {
         else { return false; }
     }
 
-    fn last_component(&self) -> PathBuf {
+    fn last_component(&self) -> Option<PathBuf> {
         match self.components().last() {
-            Some(s) => { PathBuf::from(s.as_os_str()) },
-            None => { PathBuf::new() },
+            Some(s) => { Some(PathBuf::from(s.as_os_str())) },
+            None => { None },
         }
     }
 
-    fn first_component(&self) -> PathBuf {
+    fn first_component(&self) -> Option<PathBuf> {
         match self.components().nth(0) {
-            Some(s) => { PathBuf::from(s.as_os_str()) },
-            None => { PathBuf::new() },
+            Some(s) => { Some(PathBuf::from(s.as_os_str())) },
+            None => { None },
         }
     }
 
-    fn rel_to_parent(&self) -> PathBuf {
+    fn rel_to_parent(&self) -> Option<PathBuf> {
         let parent = match self.parent() {
             Some(p) => { p },
-            None => { Path::new("") }
+            None => { return None; }
         };
         match self.relative_from(parent) {
-            Some(s) => { PathBuf::from(s) },
-            None => { PathBuf::from("") }
+            Some(s) => { Some(PathBuf::from(s)) },
+            None => { None }
         }
     }
 
@@ -192,13 +191,13 @@ impl PathMod for Path {
 
 #[test]
 fn test_pathmod_first_comp() {
-    let comp = Path::new("/etc/test").first_component();
+    let comp = Path::new("/etc/test").first_component().unwrap();
     assert_eq!(comp, PathBuf::from("/"));
 }
 
 #[test]
 fn test_pathmod_last_comp() {
-    let comp = Path::new("/etc/test").last_component();
+    let comp = Path::new("/etc/test").last_component().unwrap();
     assert_eq!(comp, PathBuf::from("test"));
 }
 
@@ -218,4 +217,10 @@ fn test_pathmod_as_string() {
 fn test_pathmod_is_dot() {
     let path = Path::new("/dir/test/.test");
     assert_eq!(path.is_dot(), true);
+}
+
+#[test]
+fn test_pathmod_rel_to_parent() {
+    let path = PathBuf::from("/var/log/test");
+    assert_eq!(PathBuf::from("test"), path.rel_to_parent().unwrap());
 }
