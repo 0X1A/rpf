@@ -38,7 +38,7 @@ impl Prog {
     /// "Copyright (C) 2015 util developers\n\
     /// License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
     /// This is free software: you are free to change and redistribute it.\n\
-    /// There is NO WARRANTY, to the extent permitted by law.\n", vec!["Author"]);
+    /// There is NO WARRANTY, to the extent permitted by law.\n", &["Author"]);
     /// ```
     ///
     /// Would print the following:
@@ -52,7 +52,7 @@ impl Prog {
     ///
     /// Written by Author
     /// ```
-    pub fn copyright(&self, license: &str, auth: Vec<&str>) {
+    pub fn copyright(&self, license: &str, auth: &[&str]) {
         print!("{} {}\n{}", &self.name, &self.vers, license);
         print!("Written by ");
         for pers in auth.iter() {
@@ -92,5 +92,5 @@ fn test_prog_copyright() {
     "Copyright (C) 2015 util developers\n\
     License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
     This is free software: you are free to change and redistribute it.\n\
-    There is NO WARRANTY, to the extent permitted by law.\n", vec!["Author"]);
+    There is NO WARRANTY, to the extent permitted by law.\n", &["Author"]);
 }
