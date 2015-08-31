@@ -29,6 +29,7 @@ pub trait Styled {
     /// use rpf::Styled;
     ///
     /// let styled = "Styled string test".bold();
+    /// println!("{}", styled);
     /// ```
     fn bold(&self) -> ansi_term::ANSIString;
 
@@ -38,7 +39,8 @@ pub trait Styled {
     /// ```
     /// use rpf::Styled;
     ///
-    /// let styled = "Styled string test".bold();
+    /// let styled = "Styled string test".underline();
+    /// println!("{}", styled);
     /// ```
     fn underline(&self) -> ansi_term::ANSIString;
 
@@ -50,6 +52,7 @@ pub trait Styled {
     /// use rpf::Color;
     ///
     /// let painted = "Styled string test".paint(Color::Yellow);
+    /// println!("{}", painted);
     /// ```
     fn paint(&self, color: Color) -> ansi_term::ANSIString;
 }
@@ -101,11 +104,10 @@ impl Styled for str {
 }
 
 #[test]
-#[should_panic]
 fn test_styled_bold() {
     let styled = String::from("Styled string test");
     assert_eq!(styled.bold().to_string(),
-        Style::default().paint("Styled string test").to_string());
+        Style::default().bold().paint("Styled string test").to_string());
 }
 
 #[test]
