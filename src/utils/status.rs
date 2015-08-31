@@ -9,53 +9,62 @@ use utils::Color;
 use std::process;
 use std::path::PathBuf;
 
+use utils::Prog;
+
 /// Enum used for setting exit statuses
 #[derive(Copy,Clone)]
-pub enum Status {
+pub enum ExitStatus {
     Ok,
     Error,
     OptError,
     ArgError,
 }
 
-impl Status {
+pub trait Exit {
     /// Wrapper for `process::exit`, immediately exits the process with the set
     /// exit status.
     ///
     /// # Example
+    // Ignored here as doc-tests are ended because of `std::process::exit`
+    /// ```ignore
+    /// use rpf::{Prog,Exit,ExitStatus};
     ///
-    /// ```should_panic
-    /// use rpf::Status;
-    ///
-    /// Status::ArgError.exit();
+    /// let prog = Prog { name: "test", vers: "0.1.0", yr: "2015" };
+    /// prog.exit(ExitStatus::Ok);
     /// ```
-    pub fn exit(self) {
-        process::exit(self as i32);
-    }
+    fn exit(&self, status: ExitStatus);
 
     /// Used for errors, prints error messages in red terminal font and calls
-    /// `rpf::exit`
+    /// `rpf::Exit::exit`
     ///
     /// # Example
+    // Ignored here as doc-tests are ended because of `std::process::exit`
+    /// ```ignore
+    /// use rpf::{Prog,Exit,ExitStatus};
     ///
-    /// ```should_panic
-    /// use rpf::Status;
-    /// use std::path::Path;
-    ///
-    /// let file = Path::new("file.txt");
-    /// Status::Error.err("util", "Hit an error".to_string());
+    /// let prog = Prog { name: "test", vers: "0.1.0", yr: "2015" };
+    /// prog.error("Some kind of error occured!".to_string(), ExitStatus::Error);
     /// ```
-    pub fn err(&self, rpf: &str, mesg: String) {
-        println!("{}{} {}", rpf.paint(Color::Red), ":".paint(Color::Red),
-        mesg.paint(Color::Red));
-        self.exit();
+    fn error(&self, mesg: String, status: ExitStatus);
+
+    /// Used for errors when working with paths, works similar to `error`
+    fn path_error(&self, mesg: String, item: PathBuf);
+}
+
+impl Exit for Prog {
+    fn exit(&self, status: ExitStatus) {
+        process::exit(status as i32);
     }
 
-    /// Used for errors when working with paths, works similar to `err`
-    pub fn path_err(&self, mesg: String, item: PathBuf) {
+    fn error(&self, mesg: String, status: ExitStatus) {
+        println!("{}{} {}", self.name.paint(Color::Red), ":".paint(Color::Red),
+        mesg.paint(Color::Red));
+        &self.exit(status);
+    }
+
+     fn path_error(&self, mesg: String, item: PathBuf) {
         println!("{}{} {}", item.as_str().paint(Color::Red),
         ":".paint(Color::Red), mesg.paint(Color::Red));
-        self.exit();
+        &self.exit(ExitStatus::Error);
     }
-
 }
