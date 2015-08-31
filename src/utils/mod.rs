@@ -4,7 +4,7 @@
 
 pub use utils::prog::{Prog};
 pub use utils::as_path::*;
-pub use utils::status::{Status};
+pub use utils::status::{Exit,ExitStatus};
 pub use utils::styled::*;
 pub use utils::pathmod::{PathMod};
 
