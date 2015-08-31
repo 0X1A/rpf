@@ -25,10 +25,11 @@ pub trait PathMod {
     ///
     /// ```
     /// use rpf::PathMod;
-    /// use std::path::Path;
+    /// use std::path::PathBuf;
     ///
-    /// let path = Path::new("/tmp/test/mod");
+    /// let path = PathBuf::from("/tmp/test/mod");
     /// let last = path.last_component().unwrap();
+    /// assert_eq!(last, PathBuf::from("mod"));
     /// ```
     fn last_component(&self) -> Option<PathBuf>;
 
@@ -91,10 +92,10 @@ impl PathMod for PathBuf {
             Some(s) => {
                 match s.to_str() {
                     Some(k) => { k },
-                    None => { "" }
+                    None => { return false; }
                 }
             },
-            None => { "" }
+            None => { return false; }
         };
         if file_name.starts_with(".") { return true; }
         else { return false; }
@@ -214,9 +215,16 @@ fn test_pathmod_as_string() {
 }
 
 #[test]
-fn test_pathmod_is_dot() {
+fn test_pathmod_is_dot_success() {
     let path = Path::new("/dir/test/.test");
     assert_eq!(path.is_dot(), true);
+}
+
+#[test]
+#[should_panic]
+fn test_pathmod_is_dot_fail() {
+    let false_path = Path::new("/");
+    assert_eq!(false_path.is_dot(), true);
 }
 
 #[test]
