@@ -2,7 +2,7 @@
 // All rights reserved. This file is part of rpf, distributed under the
 // BSD 3-Clause license. For full terms please see the LICENSE file.
 
-use utils::Status;
+use utils::{Exit,ExitStatus};
 
 /// A structure for storing rpfram information
 ///
@@ -65,7 +65,7 @@ impl Prog {
     ///
     /// # Example
     ///
-    /// ```should_panic
+    /// ```should panic
     /// use rpf::Prog;
     ///
     /// let prog = Prog { name: "util", vers: "0.1.0", yr: "2015" };
@@ -81,8 +81,16 @@ impl Prog {
     pub fn prog_try(&self) {
         println!("{}: Missing arguments\n\
              Try '{} --help' for more information", &self.name, &self.name);
-        Status::ArgError.exit();
+        &self.exit(ExitStatus::ArgError);
     }
+}
+
+#[test]
+fn test_prog() {
+    let prog = Prog { name: "util", vers: "0.1.0", yr: "2015" };
+    assert_eq!(prog.name, "util");
+    assert_eq!(prog.vers, "0.1.0");
+    assert_eq!(prog.yr, "2015");
 }
 
 #[test]
