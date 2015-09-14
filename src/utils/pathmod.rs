@@ -46,18 +46,6 @@ pub trait PathMod {
     /// ```
     fn first_component(&self) -> Option<PathBuf>;
 
-    /// Returns a `PathBuf` of `&self` relative from its parent
-    ///
-    /// # Example
-    /// ```
-    /// use rpf::PathMod;
-    /// use std::path::PathBuf;
-    ///
-    /// let path = PathBuf::from("/tmp/test/mod");
-    /// assert_eq!(PathBuf::from("mod"), path.rel_to_parent().unwrap());
-    /// ```
-    fn rel_to_parent(&self) -> Option<PathBuf>;
-
     /// Returns a `&str` for a path, returns a blank string if unable to
     /// get a string for the path
     ///
@@ -115,17 +103,6 @@ impl PathMod for PathBuf {
         }
     }
 
-    fn rel_to_parent(&self) -> Option<PathBuf> {
-        let parent = match self.parent() {
-            Some(p) => { p },
-            None => { return None }
-        };
-        match self.relative_from(parent) {
-            Some(s) => { Some(PathBuf::from(s)) },
-            None => { None }
-        }
-    }
-
     fn as_str(&self) -> &str {
         match self.to_str() {
             Some(s) => { s },
@@ -164,17 +141,6 @@ impl PathMod for Path {
         match self.components().nth(0) {
             Some(s) => { Some(PathBuf::from(s.as_os_str())) },
             None => { None },
-        }
-    }
-
-    fn rel_to_parent(&self) -> Option<PathBuf> {
-        let parent = match self.parent() {
-            Some(p) => { p },
-            None => { return None; }
-        };
-        match self.relative_from(parent) {
-            Some(s) => { Some(PathBuf::from(s)) },
-            None => { None }
         }
     }
 
@@ -225,10 +191,4 @@ fn test_pathmod_is_dot_success() {
 fn test_pathmod_is_dot_fail() {
     let false_path = Path::new("/");
     assert_eq!(false_path.is_dot(), true);
-}
-
-#[test]
-fn test_pathmod_rel_to_parent() {
-    let path = PathBuf::from("/var/log/test");
-    assert_eq!(PathBuf::from("test"), path.rel_to_parent().unwrap());
 }
