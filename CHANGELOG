@@ -1,0 +1,27 @@
+0.1.6   
+	- `exit` now belongs to `Prog` struct, functions the same.
+    	- `error` under the `Exit` trait no longer only takes a `String`
+
+0.1.5
+	- Deprecated `rel_to_parent`
+    	- Now compiles with stable rustc (1.2.0)
+
+0.1.4
+	- Functions for `PathMod` trait now return optional values, these include:
+    	  last_component, first_component, rel_to_parent
+    	- `rel_to_parent` has replaced `rel_to`
+    	- A vector is no longer used to store author names in `prog`
+
+0.1.3
+    	- Fixes test.rs for Windows
+
+0.1.2
+    	- Match filetypes explicity in `test:remove`
+    	- Add `test::create_symlink` for Windows
+
+0.1.1
+    	- Deprecate `is_symlink` in PathMod as this is available in the Rust
+    	  standard library
+
+0.1.0
+    	- Initial release
