@@ -1,8 +1,9 @@
 [package]
 name = "rpf"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Alberto Corona <ac@albertocorona.com>"]
 description = "A framework for creating Rust programs"
+documentation = "http://0x1a.github.io/rpf/rpf/index.html"
 repository = "https://gitlab.com/0X1A/rpf"
 keywords = ["framework"]
 license = "BSD-3-Clause"
