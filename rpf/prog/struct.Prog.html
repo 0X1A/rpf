@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Prog` struct in crate `rpf`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Prog">
+
+    <title>rpf::prog::Prog - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>rpf</a>::<wbr><a href='index.html'>prog</a></p><script>window.sidebarCurrent = {name: 'Prog', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>rpf</a>::<wbr><a href='index.html'>prog</a>::<wbr><a class='struct' href=''>Prog</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-33' class='srclink' href='../../src/rpf/utils/prog.rs.html#20-27' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Prog {
+    pub name: &amp;'static <a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,
+    pub vers: &amp;'static <a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,
+    pub yr: &amp;'static <a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,
+}</pre><div class='docblock'><p>A structure for storing program information</p>
+
+<h1 id='example' class='section-header'><a href='#example'>Example</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>rpf</span>::<span class='ident'>Prog</span>;
+
+<span class='kw'>static</span> <span class='ident'>UTIL</span>: <span class='ident'>Prog</span> <span class='op'>=</span> <span class='ident'>Prog</span> { <span class='ident'>name</span>: <span class='string'>&quot;util&quot;</span>, <span class='ident'>vers</span>: <span class='string'>&quot;0.1.0&quot;</span>, <span class='ident'>yr</span>: <span class='string'>&quot;2015&quot;</span> };
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>UTIL</span>.<span class='ident'>name</span>, <span class='string'>&quot;util&quot;</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>UTIL</span>.<span class='ident'>vers</span>, <span class='string'>&quot;0.1.0&quot;</span>);
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>UTIL</span>.<span class='ident'>yr</span>, <span class='string'>&quot;2015&quot;</span>);</pre>
+</div><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                                  <td id='structfield.name'><code>name</code></td><td><div class='docblock'><p>Name of program</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.vers'><code>vers</code></td><td><div class='docblock'><p>Version of program</p>
+</div></td></tr><tr class='stab '>
+                                  <td id='structfield.yr'><code>yr</code></td><td><div class='docblock'><p>Year of copyright for program</p>
+</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl <a class='struct' href='../../rpf/struct.Prog.html' title='rpf::Prog'>Prog</a></code></h3><div class='impl-items'><h4 id='method.copyright' class='method'><code>fn <a href='#method.copyright' class='fnname'>copyright</a>(&amp;self, license: &amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, auth: <a href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;[</a>&amp;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a><a href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a>)</code></h4>
+<div class='docblock'><p>Prints copyright, version, and author information</p>
+
+<h1 id='example' class='section-header'><a href='#example'>Example</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>rpf</span>::<span class='ident'>Prog</span>;
+
+<span class='kw'>let</span> <span class='ident'>prog</span> <span class='op'>=</span> <span class='ident'>Prog</span> { <span class='ident'>name</span>: <span class='string'>&quot;util&quot;</span>, <span class='ident'>vers</span>: <span class='string'>&quot;0.1.0&quot;</span>, <span class='ident'>yr</span>: <span class='string'>&quot;2015&quot;</span> };
+<span class='ident'>prog</span>.<span class='ident'>copyright</span>(
+<span class='string'>&quot;Copyright (C) 2015 util developers\n\
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;.\n\
+This is free software: you are free to change and redistribute it.\n\
+There is NO WARRANTY, to the extent permitted by law.\n&quot;</span>, <span class='kw-2'>&amp;</span>[<span class='string'>&quot;Author&quot;</span>]);</pre>
+
+<p>Would print the following:</p>
+
+<pre><code class="language-bash">util 0.1.0
+Copyright (C) 2015 util developers
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Author
+</code></pre>
+</div><h4 id='method.prog_try' class='method'><code>fn <a href='#method.prog_try' class='fnname'>prog_try</a>(&amp;self)</code></h4>
+<div class='docblock'><p>Used for when no arguments are given to a util</p>
+
+<h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
+<pre><code class="language-should">use rpf::Prog;
+
+let prog = Prog { name: &quot;util&quot;, vers: &quot;0.1.0&quot;, yr: &quot;2015&quot; };
+prog.prog_try();
+</code></pre>
+
+<p>Would print the following:</p>
+
+<pre><code class="language-bash">util: Missing arguments
+Try util --help for more information
+</code></pre>
+</div><h4 id='method.exit' class='method'><code>fn <a href='#method.exit' class='fnname'>exit</a>(&amp;self, status: <a class='enum' href='../../rpf/enum.ExitStatus.html' title='rpf::ExitStatus'>ExitStatus</a>)</code></h4>
+<div class='docblock'><p>Wrapper for <code>process::exit</code>, immediately exits the process with the set
+exit status.</p>
+
+<h1 id='example' class='section-header'><a href='#example'>Example</a></h1><pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>rpf</span>::{<span class='ident'>Prog</span>,<span class='ident'>Exit</span>,<span class='ident'>ExitStatus</span>};
+
+<span class='kw'>let</span> <span class='ident'>prog</span> <span class='op'>=</span> <span class='ident'>Prog</span> { <span class='ident'>name</span>: <span class='string'>&quot;test&quot;</span>, <span class='ident'>vers</span>: <span class='string'>&quot;0.1.0&quot;</span>, <span class='ident'>yr</span>: <span class='string'>&quot;2015&quot;</span> };
+<span class='ident'>prog</span>.<span class='ident'>exit</span>(<span class='ident'>ExitStatus</span>::<span class='prelude-val'>Ok</span>);</pre>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;&gt; <a class='trait' href='../../rpf/status/trait.Exit.html' title='rpf::status::Exit'>Exit</a>&lt;T&gt; for <a class='struct' href='../../rpf/struct.Prog.html' title='rpf::Prog'>Prog</a></code></h3><div class='impl-items'><h4 id='method.error' class='method'><code>fn <a href='../../rpf/status/trait.Exit.html#method.error' class='fnname'>error</a>(&amp;self, mesg: T, status: <a class='enum' href='../../rpf/enum.ExitStatus.html' title='rpf::ExitStatus'>ExitStatus</a>)</code></h4>
+<h4 id='method.path_error' class='method'><code>fn <a href='../../rpf/status/trait.Exit.html#method.path_error' class='fnname'>path_error</a>(&amp;self, mesg: T, item: <a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.PathBuf.html' title='std::path::PathBuf'>PathBuf</a>)</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "rpf";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script async src="../../search-index.js"></script>
+</body>
+</html>

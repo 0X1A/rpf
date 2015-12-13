@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Prog","A structure for storing program information"]]});

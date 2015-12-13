@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Color","Wrapper for `ansi_term::Colour`"]],"trait":[["Styled","Trait for creating stylized console printing using `ansi_term`"]]});

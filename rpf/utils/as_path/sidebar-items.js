@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["AsPath","A trait for treating String and str as `Path` and `PathBuf`"]]});

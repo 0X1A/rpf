@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["create_dir","Creates a directory"],["create_file","Creates a file"],["create_symlink",""],["remove","Removes a directory or file and all of its contents."]]});
