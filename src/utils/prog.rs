@@ -1,11 +1,11 @@
-// Copyright (C) 2015, Alberto Corona <alberto@0x1a.us>
+// Copyright (C) 2015, Alberto Corona <ac@albertocorona.com>
 // All rights reserved. This file is part of rpf, distributed under the
 // BSD 3-Clause license. For full terms please see the LICENSE file.
 
 use utils::ExitStatus;
 use std::process;
 
-/// A structure for storing rpfram information
+/// A structure for storing program information
 ///
 /// # Example
 ///

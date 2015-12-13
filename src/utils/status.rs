@@ -1,4 +1,4 @@
-// Copyright (C) 2015, Alberto Corona <alberto@0x1a.us>
+// Copyright (C) 2015, Alberto Corona <ac@albertocorona.com>
 // All rights reserved. This file is part of rpf, distributed under the
 // BSD 3-Clause license. For full terms please see the LICENSE file.
 
@@ -19,6 +19,7 @@ pub enum ExitStatus {
     ArgError,
 }
 
+/// Causes a `Prog` struct to exit using an error and exit status
 pub trait Exit<T: AsRef<str>> {
     /// Used for errors, prints error messages in red terminal font and calls
     /// `rpf::Exit::exit`
