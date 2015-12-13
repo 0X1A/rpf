@@ -6,7 +6,6 @@ use utils::PathMod;
 use utils::Styled;
 use utils::Color;
 
-use std::process;
 use std::path::PathBuf;
 
 use utils::Prog;
@@ -20,20 +19,7 @@ pub enum ExitStatus {
     ArgError,
 }
 
-pub trait Exit {
-    /// Wrapper for `process::exit`, immediately exits the process with the set
-    /// exit status.
-    ///
-    /// # Example
-    // Ignored here as doc-tests are ended because of `std::process::exit`
-    /// ```ignore
-    /// use rpf::{Prog,Exit,ExitStatus};
-    ///
-    /// let prog = Prog { name: "test", vers: "0.1.0", yr: "2015" };
-    /// prog.exit(ExitStatus::Ok);
-    /// ```
-    fn exit(&self, status: ExitStatus);
-
+pub trait Exit<T: AsRef<str>> {
     /// Used for errors, prints error messages in red terminal font and calls
     /// `rpf::Exit::exit`
     ///
@@ -45,26 +31,22 @@ pub trait Exit {
     /// let prog = Prog { name: "test", vers: "0.1.0", yr: "2015" };
     /// prog.error("Some kind of error occured!".to_string(), ExitStatus::Error);
     /// ```
-    fn error(&self, mesg: String, status: ExitStatus);
+    fn error(&self, mesg: T, status: ExitStatus);
 
     /// Used for errors when working with paths, works similar to `error`
-    fn path_error(&self, mesg: String, item: PathBuf);
+    fn path_error(&self, mesg: T, item: PathBuf);
 }
 
-impl Exit for Prog {
-    fn exit(&self, status: ExitStatus) {
-        process::exit(status as i32);
-    }
-
-    fn error(&self, mesg: String, status: ExitStatus) {
+impl <T: AsRef<str>> Exit<T> for Prog {
+    fn error(&self, mesg: T, status: ExitStatus) {
         println!("{}{} {}", self.name.paint(Color::Red), ":".paint(Color::Red),
-        mesg.paint(Color::Red));
+        mesg.as_ref().paint(Color::Red));
         &self.exit(status);
     }
 
-     fn path_error(&self, mesg: String, item: PathBuf) {
+     fn path_error(&self, mesg: T, item: PathBuf) {
         println!("{}{} {}", item.as_str().paint(Color::Red),
-        ":".paint(Color::Red), mesg.paint(Color::Red));
+        ":".paint(Color::Red), mesg.as_ref().paint(Color::Red));
         &self.exit(ExitStatus::Error);
     }
 }

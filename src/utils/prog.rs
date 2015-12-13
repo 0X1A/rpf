@@ -2,7 +2,8 @@
 // All rights reserved. This file is part of rpf, distributed under the
 // BSD 3-Clause license. For full terms please see the LICENSE file.
 
-use utils::{Exit,ExitStatus};
+use utils::ExitStatus;
+use std::process;
 
 /// A structure for storing rpfram information
 ///
@@ -83,6 +84,22 @@ impl Prog {
              Try '{} --help' for more information", &self.name, &self.name);
         &self.exit(ExitStatus::ArgError);
     }
+
+    /// Wrapper for `process::exit`, immediately exits the process with the set
+    /// exit status.
+    ///
+    /// # Example
+    // Ignored here as doc-tests are ended because of `std::process::exit`
+    /// ```ignore
+    /// use rpf::{Prog,Exit,ExitStatus};
+    ///
+    /// let prog = Prog { name: "test", vers: "0.1.0", yr: "2015" };
+    /// prog.exit(ExitStatus::Ok);
+    /// ```
+    pub fn exit(&self, status: ExitStatus) {
+        process::exit(status as i32);
+    }
+
 }
 
 #[test]

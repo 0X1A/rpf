@@ -28,8 +28,7 @@ pub trait Styled {
     /// ```
     /// use rpf::Styled;
     ///
-    /// let styled = "Styled string test".bold();
-    /// println!("{}", styled);
+    /// println!("{}", "Styled string test".bold());
     /// ```
     fn bold(&self) -> ansi_term::ANSIString;
 
@@ -39,8 +38,7 @@ pub trait Styled {
     /// ```
     /// use rpf::Styled;
     ///
-    /// let styled = "Styled string test".underline();
-    /// println!("{}", styled);
+    /// println!("{}", "Styled string test".underline());
     /// ```
     fn underline(&self) -> ansi_term::ANSIString;
 
@@ -51,75 +49,48 @@ pub trait Styled {
     /// use rpf::Styled;
     /// use rpf::Color;
     ///
-    /// let painted = "Styled string test".paint(Color::Yellow);
-    /// println!("{}", painted);
+    /// println!("{}", "Styled string test".paint(Color::Yellow));
     /// ```
     fn paint(&self, color: Color) -> ansi_term::ANSIString;
 }
 
-impl Styled for String {
+impl<T: AsRef<str>> Styled for T {
     fn bold(&self) -> ansi_term::ANSIString {
-        Style::default().bold().paint(&self)
+        Style::default().bold().paint(&self.as_ref())
     }
 
     fn underline(&self) -> ansi_term::ANSIString {
-        Style::default().underline().paint(&self)
+        Style::default().underline().paint(&self.as_ref())
     }
 
     fn paint(&self, color: Color) -> ansi_term::ANSIString {
         match color {
-            Color::Black   => { Colour::Black.paint(&self) },
-            Color::Red     => { Colour::Red.paint(&self) },
-            Color::Green   => { Colour::Green.paint(&self) },
-            Color::Yellow  => { Colour::Yellow.paint(&self) },
-            Color::Blue    => { Colour::Blue.paint(&self) },
-            Color::Purple  => { Colour::Purple.paint(&self) },
-            Color::Cyan    => { Colour::Cyan.paint(&self) },
-            Color::White   => { Colour::White.paint(&self) },
-        }
-    }
-}
-
-impl Styled for str {
-    fn bold(&self) -> ansi_term::ANSIString {
-        Style::default().bold().paint(&self)
-    }
-
-    fn underline(&self) -> ansi_term::ANSIString {
-        Style::default().underline().paint(&self)
-    }
-
-    fn paint(&self, color: Color) -> ansi_term::ANSIString {
-        match color {
-            Color::Black   => { Colour::Black.paint(&self) },
-            Color::Red     => { Colour::Red.paint(&self) },
-            Color::Green   => { Colour::Green.paint(&self) },
-            Color::Yellow  => { Colour::Yellow.paint(&self) },
-            Color::Blue    => { Colour::Blue.paint(&self) },
-            Color::Purple  => { Colour::Purple.paint(&self) },
-            Color::Cyan    => { Colour::Cyan.paint(&self) },
-            Color::White   => { Colour::White.paint(&self) },
+            Color::Black   => { Colour::Black.paint(&self.as_ref()) },
+            Color::Red     => { Colour::Red.paint(&self.as_ref()) },
+            Color::Green   => { Colour::Green.paint(&self.as_ref()) },
+            Color::Yellow  => { Colour::Yellow.paint(&self.as_ref()) },
+            Color::Blue    => { Colour::Blue.paint(&self.as_ref()) },
+            Color::Purple  => { Colour::Purple.paint(&self.as_ref()) },
+            Color::Cyan    => { Colour::Cyan.paint(&self.as_ref()) },
+            Color::White   => { Colour::White.paint(&self.as_ref()) },
         }
     }
 }
 
 #[test]
 fn test_styled_bold() {
-    let styled = String::from("Styled string test");
-    assert_eq!(styled.bold().to_string(),
+    assert_eq!(String::from("Styled string test").bold().to_string(),
         Style::default().bold().paint("Styled string test").to_string());
 }
 
 #[test]
 fn test_styled_underline() {
-    let styled = String::from("Styled string test");
-    assert_eq!(styled.underline().to_string(),
+    assert_eq!(String::from("Styled string test").underline().to_string(),
         Style::default().underline().paint("Styled string test").to_string());
 }
 
 #[test]
 fn test_styled_paint() {
-    let styled = String::from("Styled string test");
-    assert_eq!(styled.paint(Color::Yellow).to_string(),
+    assert_eq!(String::from("Styled string test").paint(Color::Yellow).to_string(),
         Colour::Yellow.paint("Styled string test").to_string());
 }
